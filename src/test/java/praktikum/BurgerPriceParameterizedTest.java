@@ -1,21 +1,23 @@
 package praktikum;
 
-import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 @RunWith(Parameterized.class)
 public class BurgerPriceParameterizedTest {
 
-    Burger burger;
+    private Burger burger;
 
-    private AutoCloseable mocks;
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Mock
     private Bun bunMock;
@@ -47,11 +49,11 @@ public class BurgerPriceParameterizedTest {
     @Before
     public void setUp() {
         burger = new Burger();
-        mocks = MockitoAnnotations.openMocks(this);
     }
 
     @Test
     public void shouldCalculatePrice() {
+
         when(bunMock.getPrice()).thenReturn(bunPrice);
         when(ingredientMock.getPrice()).thenReturn(ingredientPrice);
 
@@ -60,13 +62,6 @@ public class BurgerPriceParameterizedTest {
 
         float actualPrice = burger.getPrice();
 
-        assertEquals("Расчет стоимости бургера неверен", expectedPrice, actualPrice, 0.001f);
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (mocks != null) {
-            mocks.close();
-        }
+        assertEquals("Расчет стоимости бургера неверен!", expectedPrice, actualPrice, 0.001f);
     }
 }
